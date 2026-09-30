@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uniformes Anápolis — Confecção corporativa e uniformes sob medida</title>
+<meta name="description" content="Fabricação própria de uniformes profissionais, camisetas corporativas e vestuário personalizado em Anápolis - GO. Pedido mínimo de 10 peças, bordado computadorizado e estamparia de alta definição.">
+<meta name="theme-color" content="#060812">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&amp;family=Nunito:wght@400;500;600;700;800&amp;display=swap">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio.
+   Put this @layer first; product CSS outside the layer always wins. */
+@layer od-layout {
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+
+  /* containers */
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-fill    { flex: 1 1 0; min-width: 0; }
+  .od-fixed   { flex: none; }
+  .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+
+  /* stacked information: each piece is its own line — never sibling inline spans */
+  .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+
+  /* media keeps its intrinsic ratio by default; never a distorted or cropped
+     cover by accident. height:auto lets the ratio win over an <img height="…">
+     attribute. Cropping to a uniform box is an explicit opt-in: set --od-ratio
+     AND add .od-media-cover together (per the core rule, only where a crop is
+     deliberate — tile thumbs, decorative fills — never on full-frame content). */
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+
+  /* data text only — authored copy is rewritten to its budget instead */
+  .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .od-clamp-2 { -webkit-line-clamp: 2; }
+  .od-clamp-3 { -webkit-line-clamp: 3; }
+  .od-lines-2 { min-height: calc(2 * 1.4em); }   /* block-level reservation for a shared baseline */
+  .od-nowrap  { white-space: nowrap; }           /* 数字+单位 · 价格+起 · 日期+星期 */
+  .od-keep    { word-break: keep-all; overflow-wrap: anywhere; } /* CJK labels break at spaces / <wbr> first */
+
+  /* screen skeleton (optional): bars take their own space, the middle scrolls — no padding guessed for chrome */
+  .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+
+  /* horizontal rail: the next item peeks at the edge; trailing room survives overflow */
+  .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+             padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+  .od-rail::-webkit-scrollbar { display: none; }
+  :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+  :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+
+  .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+/* /OD-LAYOUT-PRIMITIVES v1 */
+
+/* ============================================================
+   DESIGN SPEC v2.0.0 — Uniformes Anápolis
+   Dark profundo + grafite quente + cobre têxtil. Fonte: brand.
+   Todos os valores abaixo são a única origem de verdade: nada de hex solto no corpo.
+   ============================================================ */
+:root{
+  color-scheme: dark;
+
+  /* superfícies — base profunda fechada, camadas em grafite quente (nada de azul) */
+  --bg:#060812;
+  --bg-deep:#03040a;
+  --surface-1:#191317;
+  --surface-2:#221b1c;
+  --surface-3:#120e10;
+
+  /* texto */
+  --text-high:#f4f0ec;
+  --text-muted:#a9a19c;
+  --text-soft:#c79a76;
+
+  /* cobre / CTA */
+  --copper:#a36337;          /* bordas, filetes, ícones, foco */
+  --copper-text:#e8b183;     /* cobre claro: reservado a TEXTO (o cobre puro não passa em 4,5:1) */
+  --copper-cta:#a84f2d;      /* preenchimento de botão: 5,5:1 com branco */
+  --copper-cta-hover:#b6552f;
+  --copper-cta-active:#8f3f22;
+  --soft-1:#f7d9c4;
+  --soft-2:#c79a76;
+
+  /* ação de WhatsApp — verde funcional: só onde o clique abre o wa.me */
+  --wa:#25d366;
+  --wa-ink:#04240f;
+  --wa-hover:#1fbc5b;
+  --wa-active:#18a34e;
+
+  /* apoio */
+  --support-1:#7a4a28;
+  --support-2:#c98a52;
+
+  /* véus e pilhas translúcidas (camadas quentes) */
+  --card-grad:linear-gradient(180deg,var(--surface-1) 0%,rgba(9,7,10,.86) 100%);
+
+  --line:rgba(199,154,118,.16);
+  --line-2:rgba(199,154,118,.28);
+  --line-copper:rgba(163,99,55,.45);
+
+  /* tipografia — display geométrico + corpo arredondado e quente */
+  --font-display:"Outfit","Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-body:"Nunito","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --fs-12:.75rem;  --fs-14:.875rem; --fs-16:1rem;   --fs-18:1.125rem;
+  --fs-21:1.3125rem; --fs-25:1.5625rem; --fs-30:1.875rem; --fs-38:clamp(1.75rem,4vw,2.375rem);
+  --fs-52:clamp(2rem,5vw,3.25rem); --fs-72:clamp(2.25rem,6.4vw,4.5rem);
+  --lh-body:1.6;
+  --measure:68ch;
+
+  /* espaçamento (base 4, ritmo 8) */
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
+  --gutter:clamp(20px,5vw,48px);
+  --section-y:clamp(56px,8vw,96px);
+  --maxw:1200px;
+
+  /* forma */
+  --r-s:14px; --r-m:20px; --r-l:32px; --r-pill:999px;
+  --shadow-card:inset 0 1px 0 rgba(255,226,203,.06), 0 18px 40px -14px rgba(0,0,0,.62), 0 2px 8px rgba(0,0,0,.40);
+  --shadow-lift:inset 0 1px 0 rgba(255,226,203,.09), 0 28px 56px -16px rgba(0,0,0,.70), 0 4px 14px rgba(0,0,0,.45);
+  --glow-copper:0 0 0 1px rgba(163,99,55,.34);
+  /* filete de brilho no topo dos cards: cobre em fade — nunca borda neon */
+  --sheen:linear-gradient(90deg,rgba(199,154,118,0) 0%,rgba(214,168,128,.55) 50%,rgba(199,154,118,0) 100%);
+
+  /* motion */
+  --dur-in:220ms; --dur-out:140ms; --stagger:40ms;
+  --ease-out:cubic-bezier(.2,.7,.3,1);
+  --ease-in:cubic-bezier(.5,0,.9,.3);
+
+  --header-h:68px;
+}
+
+/* ---------- reset ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:calc(var(--header-h) + 20px); }
+body{
+  margin:0;
+  background:
+    radial-gradient(120% 62% at 50% -12%, rgba(78,42,26,.32) 0%, rgba(6,8,18,0) 62%),
+    var(--bg);
+  color:var(--text-high);
+  font-family:var(--font-body);
+  font-size:var(--fs-16);
+  font-weight:400;
+  line-height:var(--lh-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4,p,figure,blockquote,ul,ol{ margin:0; }
+ul,ol{ padding:0; list-style:none; }
+img,svg{ max-width:100%; }
+button{ font:inherit; color:inherit; }
+a{ color:var(--soft-1); text-decoration:none; }
+:focus-visible{ outline:2px solid var(--copper-text); outline-offset:3px; border-radius:6px; }
+[tabindex="-1"]:focus{ outline:none; }
+/* âncoras internas: nunca viram requisição de rede, só rolagem na própria página */
+a[href^="#"]{ cursor:pointer; }
+::selection{ background:rgba(184,90,50,.5); color:#fff; }
+
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.skip{
+  position:absolute; left:var(--sp-4); top:-64px; z-index:60;
+  display:inline-flex; align-items:center; min-height:44px; padding:0 var(--sp-4);
+  background:var(--copper-cta); color:#fff; border-radius:var(--r-s);
+  font-size:var(--fs-14); font-weight:600; transition:top var(--dur-in) var(--ease-out);
+}
+.skip:focus{ top:var(--sp-3); }
+
+/* ---------- ícones (família única: outline, 24px, 1.75px, caps round) ---------- */
+.ico{ width:24px; height:24px; flex:none; fill:none; stroke:currentColor; stroke-width:1.75;
+      stroke-linecap:round; stroke-linejoin:round; display:block; }
+.ico--sm{ width:20px; height:20px; stroke-width:1.9; }
+.ico--lg{ width:28px; height:28px; }
+
+/* ---------- layout de página ---------- */
+.wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gutter); }
+.section{ padding-block:var(--section-y); scroll-margin-top:calc(var(--header-h) + 16px); }
+.section--alt{ background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 100%); }
+.section--line{ border-top:1px solid var(--line); }
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  font-size:var(--fs-12); font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--copper-text);
+}
+.eyebrow::before{ content:""; width:28px; height:1px; background:var(--copper); }
+/* títulos em case de frase: perto de quem lê, sem perder peso */
+.h2{
+  font-family:var(--font-display); font-weight:800; text-transform:none;
+  font-size:var(--fs-38); line-height:1.14; letter-spacing:-.015em; text-wrap:balance;
+  margin-top:var(--sp-3);
+}
+.lead{ max-width:var(--measure); color:var(--text-muted); font-size:var(--fs-18); margin-top:var(--sp-4); }
+.head{ margin-bottom:clamp(28px,4vw,48px); }
+
+/* ---------- botões ---------- */
+.btn{
+  --btn-bg:transparent; --btn-fg:var(--text-high); --btn-bd:var(--line-2);
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--sp-2);
+  min-height:48px; padding:12px var(--sp-5);
+  font-family:var(--font-body); font-size:var(--fs-16); font-weight:600; line-height:1.2;
+  text-align:center; text-decoration:none; white-space:nowrap;
+  background:var(--btn-bg); color:var(--btn-fg);
+  border:1px solid var(--btn-bd); border-radius:var(--r-pill);
+  cursor:pointer;
+  transition:background-color var(--dur-in) var(--ease-out),
+             border-color var(--dur-in) var(--ease-out),
+             color var(--dur-in) var(--ease-out),
+             transform var(--dur-out) var(--ease-in),
+             box-shadow var(--dur-in) var(--ease-out);
+}
+/* cobre vibrante = ação de marca. Verde = só o que abre o WhatsApp. */
+.btn--primary{ --btn-bg:var(--copper-cta); --btn-bd:var(--copper-cta); --btn-fg:#fff; box-shadow:0 10px 26px -6px rgba(168,79,45,.45); }
+.btn--ghost{ --btn-bg:rgba(25,19,23,.55); --btn-bd:var(--line-2); --btn-fg:var(--text-high); }
+.btn--wa{ --btn-bg:var(--wa); --btn-bd:var(--wa); --btn-fg:var(--wa-ink); box-shadow:0 10px 26px -6px rgba(37,211,102,.42); }
+.btn--block{ width:100%; }
+.btn--xl{ flex-direction:column; gap:2px; min-height:76px; padding:14px var(--sp-6); border-radius:var(--r-m); }
+.btn__label{ display:block; font-size:clamp(1rem,2.6vw,1.3125rem); font-weight:800; letter-spacing:.02em; text-transform:uppercase; }
+.btn__sub{ display:block; font-size:var(--fs-12); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.82); }
+.btn--wa .btn__sub{ color:rgba(4,36,15,.78); }
+@media (hover:hover){
+  .btn--primary:hover{ --btn-bg:var(--copper-cta-hover); --btn-bd:var(--copper-cta-hover); box-shadow:0 16px 32px -8px rgba(184,90,50,.50); transform:translateY(-2px); }
+  .btn--wa:hover{ --btn-bg:var(--wa-hover); --btn-bd:var(--wa-hover); box-shadow:0 16px 32px -8px rgba(37,211,102,.50); transform:translateY(-2px); }
+  .btn--ghost:hover{ --btn-bd:var(--copper); --btn-fg:var(--soft-1); background:rgba(34,27,28,.9); }
+  .btn:active{ transform:translateY(0); }
+  .btn--primary:active{ --btn-bg:var(--copper-cta-active); --btn-bd:var(--copper-cta-active); }
+  .btn--wa:active{ --btn-bg:var(--wa-active); --btn-bd:var(--wa-active); }
+}
+
+/* ---------- header ---------- */
+.header{
+  position:fixed; inset:0 0 auto 0; z-index:50;
+  background:rgba(6,8,18,.88);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header__in{ display:flex; align-items:center; gap:var(--sp-5); min-height:var(--header-h); }
+/* Lockup da marca: flex:none impede que a caixa do logo e do nome sejam
+   comprimidas pelo menu — sem isso, em telas estreitas o nome quebrava em
+   duas linhas e a palavra saía de centro em relação ao logo. */
+.brand{ display:flex; align-items:center; flex:none; gap:10px; color:var(--text-high); text-decoration:none; }
+
+/* logo: a arte ocupa 770×429 dentro de uma tela 1024×1024 com folga transparente.
+   A caixa recorta a área útil pela proporção real do desenho, então a marca
+   aparece solta, sem moldura e sem distorção — nenhum pixel do logo é cortado. */
+.logo{ position:relative; display:block; overflow:hidden; aspect-ratio:770/429; }
+.logo img{
+  position:absolute; top:0; left:0; max-width:none; height:auto;
+  width:calc(100% * 1024 / 770);
+  transform:translate(-12.5%,-28.90625%);
+}
+.brand__mark{ flex:none; height:clamp(26px,3.2vw,32px); }
+.hero__logo{ width:clamp(140px,18vw,184px); margin-bottom:var(--sp-5); }
+/* align-content:center centra o bloco de texto como unidade dentro da caixa do
+   logo. O padding-block-start de 1px é correção óptica: o acento do "á" de
+   Anápolis sobe acima da altura de caixa e deixava a palavra 1px alta. */
+.brand__text{ display:grid; gap:1px; align-content:center; }
+.brand__name{ display:block; font-family:var(--font-display); font-weight:700; font-size:var(--fs-18); line-height:1.15; padding-block-start:1px; white-space:nowrap; }
+.brand__name em{ font-style:normal; color:var(--copper-text); }
+.brand__sub{ display:block; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted); }
+
+/* O lockup do header é uma linha só (marca + CTA + toggle) e não pode ser
+   comprimido: com gap de 24px a soma passava da largura útil em 320–420px,
+   o nome quebrava em duas linhas e ficava desalinhado do logo. Aqui o gap cai
+   para 12px e o logo dá um degrau, sobrando largura real para o nome. */
+@media (max-width:768px){
+  .header__in{ gap:var(--sp-3); }
+  .brand{ gap:8px; }
+  .brand__mark{ height:24px; }
+}
+@media (max-width:380px){
+  .header__in{ gap:var(--sp-2); }
+  .brand__name{ font-size:var(--fs-14); }
+  .brand__mark{ height:22px; }
+}
+.nav{ display:flex; align-items:center; gap:var(--sp-5); margin-left:auto; }
+.nav__list{ display:flex; align-items:center; gap:clamp(8px,1.4vw,20px); }
+.nav__link{
+  position:relative; display:inline-flex; align-items:center; min-height:44px; padding-inline:4px;
+  font-size:var(--fs-14); font-weight:600; color:var(--text-muted); text-decoration:none; white-space:nowrap;
+  transition:color var(--dur-in) var(--ease-out);
+}
+.nav__link::after{
+  content:""; position:absolute; left:4px; right:4px; bottom:8px; height:1px;
+  background:var(--copper); transform:scaleX(0); transform-origin:left;
+  transition:transform var(--dur-in) var(--ease-out);
+}
+@media (hover:hover){ .nav__link:hover{ color:var(--text-high); } .nav__link:hover::after{ transform:scaleX(1); } }
+.nav__link[aria-current="true"]{ color:var(--soft-1); }
+.nav__link[aria-current="true"]::after{ transform:scaleX(1); }
+/* CTA do header: some no desktop (lá quem aparece é o botão dentro do .nav)
+   e volta como botão compacto no tablet/mobile, ao lado do toggle. */
+.header__cta{ align-items:center; gap:8px; margin-left:auto; white-space:nowrap; }
+.nav__toggle{ display:none; }
+.nav__toggle .ico--close{ display:none; }
+.nav__toggle[aria-expanded="true"] .ico--menu{ display:none; }
+.nav__toggle[aria-expanded="true"] .ico--close{ display:block; }
+/* sprite de ícones: fora da tela, sem ocupar layout, mas com os <symbol> íntegros */
+.od-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  padding-top:calc(var(--header-h) + clamp(40px,7vw,88px));
+  padding-bottom:clamp(40px,6vw,72px);
+  scroll-margin-top:calc(var(--header-h) + 16px);
+}
+.hero::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 78% 6%, rgba(78,42,26,.58) 0%, rgba(6,8,18,0) 62%),
+    radial-gradient(90% 70% at 6% 0%, rgba(122,74,40,.30) 0%, rgba(6,8,18,0) 60%),
+    radial-gradient(74% 60% at 50% 102%, rgba(38,24,32,.52) 0%, rgba(6,8,18,0) 70%);
+}
+.hero__grid{ display:grid; gap:clamp(32px,5vw,64px); align-items:center; }
+.badge{
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  padding:8px 14px; border:1px solid var(--copper); border-radius:var(--r-pill);
+  font-size:var(--fs-12); font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--soft-1); background:rgba(163,99,55,.10);
+}
+/* duas mensagens na mesma caixa = dois blocos, nunca spans irmãos */
+.h1{
+  display:grid; gap:var(--sp-3); align-content:start;
+  font-family:var(--font-display); font-weight:800; text-transform:none;
+  font-size:var(--fs-72); line-height:1.06; letter-spacing:-.022em;
+  margin-top:var(--sp-5);
+}
+.h1__l1{ display:block; color:var(--text-high); text-wrap:balance; }
+/* a 2ª linha é apoio, não outro título: escala própria, legível até no celular */
+.h1__l2{
+  display:block; color:var(--copper-text);
+  font-family:var(--font-body); font-weight:700;
+  font-size:clamp(1.125rem,2.9vw,1.9rem); line-height:1.32; letter-spacing:-.005em;
+  text-wrap:balance;
+}
+.hero__sub{ max-width:58ch; margin-top:var(--sp-5); font-size:var(--fs-18); color:var(--text-muted); }
+.hero__actions{ display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-top:var(--sp-6); }
+.hero__note{ display:flex; align-items:center; gap:8px; margin-top:var(--sp-5); font-size:var(--fs-14); color:var(--text-soft); }
+
+/* frame de mídia projetado (foto do cliente entra depois) */
+.media{
+  --od-ratio:4/3;
+  position:relative; overflow:hidden;
+  background:
+    linear-gradient(150deg,var(--surface-2) 0%,var(--surface-1) 46%,var(--bg-deep) 100%);
+  border:1px solid var(--line-copper); border-radius:var(--r-l);
+  box-shadow:var(--shadow-card);
+}
+.media::before{
+  content:""; position:absolute; inset:0; opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cg fill='none' stroke='%23c98a52' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M0 13h26M13 0v26'/%3E%3Cpath d='M0 0l26 26M26 0L0 26' stroke-opacity='.08'/%3E%3C/g%3E%3C/svg%3E");
+}
+.media__in{ position:relative; display:grid; place-items:center; gap:var(--sp-3); height:100%; padding:clamp(20px,3vw,32px); text-align:center; }
+.media__mono{
+  display:grid; place-items:center; width:clamp(64px,10vw,92px); aspect-ratio:1;
+  font-family:var(--font-display); font-weight:900; font-size:clamp(1.25rem,2.6vw,1.75rem); letter-spacing:.04em;
+  color:var(--soft-1); background:rgba(9,7,10,.78); border:1px solid var(--line-copper); border-radius:var(--r-m);
+}
+.media__cap{ display:grid; gap:4px; max-width:30ch; }
+.media__title{ display:block; font-family:var(--font-display); font-weight:700; font-size:var(--fs-18); color:var(--text-high); }
+.media__text{ display:block; font-size:var(--fs-14); color:var(--text-muted); }
+.media__tag{
+  position:absolute; top:14px; right:14px;
+  padding:5px 10px; border-radius:var(--r-pill);
+  font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--soft-2); background:rgba(9,7,10,.86); border:1px dashed var(--line-copper);
+}
+.media--card{ border-radius:var(--r-m); box-shadow:none; }
+.media--card .media__mono{ width:56px; font-size:var(--fs-16); border-radius:var(--r-s); }
+
+/* ---------- barra de métricas ---------- */
+.metrics{ border-block:1px solid var(--line); background:rgba(25,19,23,.55); }
+.metrics__grid{ display:grid; gap:var(--sp-5); padding-block:clamp(24px,4vw,40px); }
+.metric{ --od-gap:4px; }
+.metric__num{
+  display:block; font-family:var(--font-display); font-weight:900; color:var(--text-high);
+  font-size:clamp(1.75rem,3.4vw,2.75rem); line-height:1.08; letter-spacing:0;
+}
+.metric__num em{ font-style:normal; color:var(--copper-text); }
+.metric__cap{ display:block; font-size:var(--fs-14); color:var(--text-muted); }
+
+/* ---------- cards de categoria ---------- */
+.cards{ --od-cols:1; --od-gap:20px; }
+.card{
+  position:relative; display:grid; grid-template-rows:auto 1fr; overflow:hidden;
+  background:var(--card-grad);
+  border:1px solid var(--line); border-radius:var(--r-l);
+  box-shadow:var(--shadow-card);
+  transition:border-color var(--dur-in) var(--ease-out), transform var(--dur-in) var(--ease-out), box-shadow var(--dur-in) var(--ease-out);
+}
+/* filete de cobre no topo: brilho sutil, sem virar moldura */
+.card::before{ content:""; position:absolute; inset:0 0 auto; height:1px; background:var(--sheen); opacity:.6; pointer-events:none; }
+.card__body{ display:grid; align-content:start; gap:var(--sp-3); padding:clamp(20px,2.4vw,28px); }
+.card__eyebrow{ font-size:var(--fs-12); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--support-2); }
+.card__title{ font-family:var(--font-display); font-weight:700; font-size:var(--fs-21); line-height:1.2; color:var(--text-high); }
+.card__desc{ font-size:var(--fs-14); color:var(--text-muted); }
+.card__meta{ --od-gap:2px; padding-top:var(--sp-1); }
+.card__meta .label{ display:block; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-soft); }
+.card__meta .value{ display:block; font-size:var(--fs-16); font-weight:600; color:var(--text-high); }
+.chips{ --od-gap:8px; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 11px; border-radius:var(--r-pill);
+  font-size:var(--fs-12); font-weight:600; letter-spacing:.04em;
+  color:var(--text-muted); background:rgba(34,27,28,.72); border:1px solid var(--line);
+}
+.card__foot{ display:grid; gap:var(--sp-3); align-content:end; }
+.card__min{ font-size:var(--fs-12); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--soft-2); }
+@media (hover:hover){ .card:hover{ border-color:var(--line-copper); transform:translateY(-4px); box-shadow:var(--shadow-lift); } }
+
+/* ---------- diferenciais ---------- */
+.diffs{ --od-cols:1; --od-gap:20px; }
+.diff{
+  position:relative; display:grid; align-content:start; gap:var(--sp-3);
+  padding:clamp(22px,2.6vw,30px);
+  background:var(--card-grad);
+  border:1px solid var(--line); border-radius:var(--r-l);
+  box-shadow:var(--shadow-card);
+}
+.diff::before{ content:""; position:absolute; inset:0 0 auto; height:1px; background:var(--sheen); opacity:.5; pointer-events:none; }
+.diff__top{ display:flex; align-items:center; gap:var(--sp-3); }
+.diff__ico{
+  display:grid; place-items:center; width:46px; height:46px; flex:none;
+  color:var(--soft-1); background:rgba(34,27,28,.85); border:1px solid var(--line-copper); border-radius:var(--r-m);
+}
+.diff__num{
+  margin-left:auto; font-family:var(--font-display); font-weight:900; font-size:var(--fs-21);
+  line-height:1; color:rgba(163,99,55,.55);
+}
+.diff__title{ font-family:var(--font-display); font-weight:700; font-size:var(--fs-21); line-height:1.22; color:var(--text-high); }
+.diff__text{ font-size:var(--fs-16); color:var(--text-muted); }
+
+/* ---------- passo a passo ---------- */
+.steps{ --od-cols:1; --od-gap:clamp(24px,3vw,28px); }
+.step{ position:relative; padding-top:var(--sp-1); }
+.step__num{
+  display:grid; place-items:center; width:44px; height:44px; margin-bottom:var(--sp-3);
+  font-family:var(--font-display); font-weight:900; font-size:var(--fs-18);
+  color:var(--soft-1); background:rgba(34,27,28,.9); border:1px solid var(--line-copper); border-radius:50%;
+}
+.step__title{ font-family:var(--font-display); font-weight:700; font-size:var(--fs-18); line-height:1.25; color:var(--text-high); }
+.step__text{ margin-top:var(--sp-2); font-size:var(--fs-14); color:var(--text-muted); }
+.steps .step:last-child::after{ display:none; }
+/* o trilho horizontal só vale quando as etapas já estão em 4 colunas (1024px) */
+@media (min-width:1024px){
+  .step::after{ content:""; position:absolute; left:60px; right:calc(-1 * clamp(24px,3vw,28px)); top:22px; height:1px; background:var(--line-2); }
+}
+@media (max-width:1023px){
+  .step::after{ content:""; position:absolute; left:22px; top:52px; bottom:calc(-1 * clamp(24px,3vw,28px)); width:1px; background:var(--line-2); }
+}
+
+/* ---------- depoimentos ---------- */
+.quotes{ position:relative; max-width:820px; margin-inline:auto; }
+/* trilho com rolagem nativa: arrasta com o dedo, roda com o mouse e
+   encaixa slide a slide por scroll-snap. Sem JS de arraste. */
+.quotes__view{
+  overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch; scrollbar-width:none;
+}
+.quotes__view::-webkit-scrollbar{ display:none; }
+.quotes__track{ display:flex; }
+.quote{
+  position:relative;
+  flex:0 0 100%; min-width:0; scroll-snap-align:start; scroll-snap-stop:always;
+  display:grid; gap:var(--sp-4); align-content:start;
+  margin:4px; padding:clamp(24px,3.4vw,40px);
+  background:var(--card-grad);
+  border:1px solid var(--line); border-radius:var(--r-l); box-shadow:var(--shadow-card);
+}
+.quote::before{ content:""; position:absolute; inset:0 0 auto; height:1px; background:var(--sheen); opacity:.45; pointer-events:none; }
+.quote__rule{ width:44px; height:2px; background:var(--copper); border-radius:2px; }
+.quote__text{ font-family:var(--font-display); font-weight:500; font-size:clamp(1.0625rem,1.8vw,1.3125rem); line-height:1.5; color:var(--text-high); }
+.quote__by{ --od-gap:2px; }
+.quote__name{ display:block; font-size:var(--fs-16); font-weight:700; color:var(--text-high); }
+.quote__org{ display:block; font-size:var(--fs-14); color:var(--text-muted); }
+.tag{
+  display:inline-flex; align-items:center; gap:6px; justify-self:start;
+  padding:4px 10px; border-radius:var(--r-pill); border:1px dashed var(--line-copper);
+  font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-soft);
+}
+.quotes__ctrl{ display:flex; align-items:center; justify-content:center; gap:var(--sp-4); margin-top:var(--sp-5); }
+.quotes__btn{
+  display:grid; place-items:center; width:44px; height:44px; flex:none;
+  color:var(--text-high); background:rgba(25,19,23,.85); border:1px solid var(--line-2); border-radius:50%;
+  cursor:pointer; transition:border-color var(--dur-in) var(--ease-out), color var(--dur-in) var(--ease-out), background-color var(--dur-in) var(--ease-out);
+}
+@media (hover:hover){ .quotes__btn:hover{ border-color:var(--copper); color:var(--soft-1); background:rgba(34,27,28,.95); } }
+.quotes__dots{ display:flex; align-items:center; gap:var(--sp-2); }
+.quotes__dot{
+  width:10px; height:10px; padding:0; border-radius:50%; cursor:pointer;
+  background:transparent; border:1px solid var(--line-2);
+  transition:background-color var(--dur-in) var(--ease-out), border-color var(--dur-in) var(--ease-out), transform var(--dur-out) var(--ease-in);
+}
+.quotes__dot[aria-current="true"]{ background:var(--copper); border-color:var(--copper); transform:scale(1.15); }
+
+/* ---------- sobre ---------- */
+.about{ display:grid; gap:clamp(24px,4vw,56px); align-items:start; }
+.about__text p + p{ margin-top:var(--sp-4); }
+.about__text p{ color:var(--text-muted); font-size:var(--fs-16); max-width:62ch; }
+.about__list{ position:relative; display:grid; gap:var(--sp-3); padding:var(--sp-5); background:rgba(25,19,23,.62); border:1px solid var(--line); border-radius:var(--r-l); }
+.about__list::before{ content:""; position:absolute; inset:0 0 auto; height:1px; background:var(--sheen); opacity:.4; pointer-events:none; }
+.about__item{ display:flex; align-items:flex-start; gap:var(--sp-3); font-size:var(--fs-14); color:var(--text-muted); }
+.about__item .ico{ color:var(--soft-1); margin-top:2px; }
+
+/* ---------- Instagram & catálogos ---------- */
+.eyebrow--soft{ color:var(--soft-2); }
+.eyebrow--soft::before{ background:var(--soft-2); }
+.social{
+  position:relative; overflow:hidden;
+  padding:clamp(24px,3.6vw,48px);
+  background:linear-gradient(158deg,var(--surface-1) 0%,rgba(52,34,30,.82) 56%,rgba(9,7,10,.94) 100%);
+  border:1px solid var(--line-copper); border-radius:var(--r-l);
+  box-shadow:var(--shadow-card);
+}
+.social::before{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background:radial-gradient(66% 100% at 84% 0%, rgba(163,99,55,.26) 0%, rgba(6,8,18,0) 62%);
+}
+.social__in{ position:relative; display:grid; gap:clamp(28px,4vw,52px); }
+.social__profile{ --od-gap:12px; margin-top:var(--sp-5); flex-wrap:wrap; }
+.social__avatar{ width:clamp(150px,22vw,200px); }
+.social__id{ --od-gap:2px; }
+.social__name{ display:block; font-size:var(--fs-16); font-weight:700; color:var(--text-high); }
+.social__handle{ display:block; font-size:var(--fs-14); color:var(--text-muted); }
+.seals{ --od-gap:10px; margin-top:var(--sp-5); }
+.seal{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:7px 13px; border-radius:var(--r-pill);
+  font-size:var(--fs-12); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--soft-1); background:rgba(163,99,55,.13); border:1px solid var(--line-copper);
+}
+.seal::before{ content:""; width:6px; height:6px; flex:none; border-radius:50%; background:var(--copper); }
+/* chamadas diretas: maiores e em case de frase — é conversa, não etiqueta */
+.seals--hero{ margin-top:var(--sp-5); }
+.seals--hero .seal{ padding:9px 15px; font-size:var(--fs-14); font-weight:700; letter-spacing:.01em; text-transform:none; }
+.seals--cta{ justify-content:center; margin-top:var(--sp-2); }
+.social__actions{ display:grid; gap:var(--sp-3); justify-items:start; margin-top:var(--sp-6); }
+.social__hint{ max-width:44ch; font-size:var(--fs-14); line-height:1.55; color:var(--text-soft); }
+.btn--social{ flex-wrap:wrap; white-space:normal; text-align:center; min-height:56px; }
+/* todo botão daqui para baixo é acionável: nada de estado "pendente" na página */
+.feed{ display:grid; gap:12px; }
+.post{
+  position:relative;
+  display:grid; grid-template-columns:clamp(104px,36%,148px) minmax(0,1fr); gap:var(--sp-4); align-items:center;
+  padding:10px; background:rgba(18,14,16,.62); border:1px solid var(--line); border-radius:var(--r-m);
+}
+.post .media{ border-radius:var(--r-s); }
+.post .media__tag{ top:6px; right:6px; padding:3px 7px; font-size:10px; }
+.post .media__in{ padding:8px; }
+.post .media__mono{ width:40px; font-size:var(--fs-12); border-radius:var(--r-s); }
+.post__cap{ --od-gap:4px; }
+.post__title{ display:block; font-family:var(--font-display); font-weight:700; font-size:var(--fs-16); line-height:1.25; color:var(--text-high); }
+.post__text{ display:block; font-size:var(--fs-14); color:var(--text-muted); }
+
+/* ---------- CTA final ---------- */
+.cta-final{
+  position:relative; overflow:hidden;
+  padding:clamp(28px,5vw,64px); text-align:center;
+  background:linear-gradient(160deg,var(--surface-2) 0%,var(--surface-1) 100%);
+  border:1px solid var(--line-copper); border-radius:var(--r-l);
+  box-shadow:var(--shadow-lift);
+}
+.cta-final::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:.6;
+  background:
+    linear-gradient(90deg,rgba(199,154,118,0) 0%,rgba(214,168,128,.6) 50%,rgba(199,154,118,0) 100%) top/100% 1px no-repeat,
+    radial-gradient(70% 120% at 50% 0%, rgba(163,99,55,.24) 0%, rgba(6,8,18,0) 62%);
+}
+.cta-final__in{ position:relative; display:grid; justify-items:center; gap:var(--sp-4); }
+.cta-final__title{
+  max-width:22ch; font-family:var(--font-display); font-weight:800; text-transform:none;
+  font-size:clamp(1.625rem,3.6vw,2.625rem); line-height:1.16; letter-spacing:-.015em; text-wrap:balance;
+}
+.cta-final__sub{ max-width:52ch; color:var(--text-muted); font-size:var(--fs-18); }
+.cta-final .btn{ margin-top:var(--sp-3); }
+
+/* ---------- rodapé ---------- */
+.footer{ background:var(--bg); border-top:1px solid var(--line); padding-block:clamp(40px,5vw,64px) var(--sp-6); }
+.footer__grid{ display:grid; gap:clamp(28px,4vw,48px); }
+.footer__about{ display:grid; gap:var(--sp-3); max-width:44ch; }
+.footer__about p{ font-size:var(--fs-14); color:var(--text-muted); }
+.footer__col{ display:grid; gap:var(--sp-3); align-content:start; }
+.footer__title{ font-size:var(--fs-12); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--soft-2); }
+.foot-list{ display:grid; gap:var(--sp-4); }
+.foot-item{ display:flex; align-items:flex-start; gap:12px; font-size:var(--fs-14); color:var(--text-muted); }
+.foot-item .od-field{ --od-gap:4px; }
+.foot-item .ico{ color:var(--support-2); margin-top:1px; }
+.foot-item a{ color:var(--text-high); text-decoration:none; border-bottom:1px solid var(--line-2); transition:color var(--dur-in) var(--ease-out), border-color var(--dur-in) var(--ease-out); }
+@media (hover:hover){ .foot-item a:hover{ color:var(--soft-1); border-color:var(--copper); } }
+.pending{ color:var(--text-soft); font-style:italic; }
+.footer__nav{ display:flex; flex-wrap:wrap; gap:var(--sp-2) var(--sp-5); }
+.footer__nav a{ display:inline-flex; align-items:center; min-height:44px; font-size:var(--fs-14); font-weight:600; color:var(--text-muted); }
+.footer__note{
+  display:flex; align-items:flex-start; gap:10px; margin-top:var(--sp-5); padding:var(--sp-3) var(--sp-4);
+  font-size:var(--fs-12); line-height:1.5; color:var(--text-soft);
+  background:rgba(163,99,55,.08); border:1px dashed var(--line-copper); border-radius:var(--r-m);
+}
+.footer__note .ico{ color:var(--copper); margin-top:1px; }
+.footer__legal{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  margin-top:clamp(28px,4vw,48px); padding-top:var(--sp-5); border-top:1px solid var(--line);
+  font-size:var(--fs-12); color:var(--text-muted);
+}
+
+/* ---------- revelação ---------- */
+.js [data-reveal]{ opacity:0; transform:translateY(14px); }
+.js [data-reveal].is-in{ opacity:1; transform:none; transition:opacity var(--dur-in) var(--ease-out), transform var(--dur-in) var(--ease-out); transition-delay:var(--d,0ms); }
+.hero [data-reveal]{ animation:rise var(--dur-in) var(--ease-out) both; animation-delay:var(--d,0ms); }
+@keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+
+/* ---------- responsivo ---------- */
+@media (min-width:560px){ .metrics__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (min-width:768px){
+  .hero__grid{ grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); }
+  .cards{ --od-cols:2; }
+  .card--wide{ grid-column:1 / -1; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); grid-template-rows:none; align-items:stretch; }
+  .card--wide .media{ height:100%; border-radius:0; border:0; border-right:1px solid var(--line-copper); }
+  .diffs{ --od-cols:2; }
+  .about{ grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr); }
+  .footer__grid{ grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.9fr); }
+}
+@media (min-width:1024px){
+  .metrics__grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--sp-6); }
+  .steps{ --od-cols:4; }
+  .social__in{ grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); align-items:center; }
+}
+/* 6 links + CTA só cabem sem colisão a partir de 1280px: abaixo disso, menu + CTA compacto */
+@media (min-width:1280px){
+  .nav__toggle{ display:none; }
+  .header__cta{ display:none; }
+}
+@media (max-width:1279px){
+  .header__cta{ display:inline-flex; min-height:44px; padding-inline:var(--sp-4); }
+  .nav__toggle{
+    display:grid; place-items:center; width:44px; height:44px;
+    color:var(--text-high); background:rgba(25,19,23,.85); border:1px solid var(--line-2); border-radius:var(--r-s); cursor:pointer;
+  }
+  .nav{
+    position:absolute; top:100%; left:0; right:0; margin:0;
+    flex-direction:column; align-items:stretch; gap:var(--sp-2);
+    padding:var(--sp-4) var(--gutter) var(--sp-5);
+    background:rgba(6,8,18,.98); border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow-lift);
+    display:none;
+  }
+  .nav.is-open{ display:flex; }
+  .nav__list{ flex-direction:column; align-items:stretch; gap:0; }
+  .nav__list li{ border-bottom:1px solid var(--line); }
+  .nav__link{ width:100%; min-height:52px; font-size:var(--fs-16); }
+  .nav__link::after{ display:none; }
+  .nav__link[aria-current="true"]{ color:var(--soft-1); }
+  .nav .btn{ margin-top:var(--sp-3); }
+}
+/* ---------- contenção do layout mobile (≤768px) ----------
+   Barreira dupla contra o corte lateral dentro do card principal:
+   (1) largura determinística + quebra real em botão, título e pílulas, para
+       que nada precise de rolagem;
+   (2) overflow-x:auto no container pai e no card como garantia — se algum
+       filho ainda passar da borda, o conteúdo fica rolável em vez de cortado.
+   Vale de 320px a 768px. Nenhum elemento do card tem largura fixa em px:
+   a largura vem de 100% e o texto quebra dentro da caixa. */
+@media (max-width:768px){
+  /* 1. container pai e card principal: nada mais largo que a viewport */
+  .wrap,
+  .section,
+  .cta-final,
+  .cta-final__in{
+    max-width:100% !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+  /* garantia final: se algo escapar, rola lateralmente em vez de ser cortado.
+     Só dois níveis, para não criar barra de rolagem aninhada. */
+  .wrap,
+  .cta-final{
+    overflow-x:auto !important;
+  }
+  .cta-final{ padding-inline:12px; }
+
+  /* 2. botão verde do orçamento: largura travada e quebra de linha real */
+  .btn{
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere;
+  }
+  /* o CTA do header tem espaço próprio acima de 640px: não precisa quebrar */
+  .header__cta{ white-space:nowrap; }
+  .btn--xl{
+    display:flex !important;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    height:auto !important;
+    min-height:76px;
+    padding:12px 10px !important;
+    font-size:.9rem;
+    text-align:center;
+    white-space:normal !important;
+    word-break:break-word !important;
+  }
+  .btn--xl .btn__label,
+  .btn--xl .btn__sub{
+    display:block;
+    width:100% !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere;
+    word-break:break-word !important;
+  }
+  .btn--xl .btn__label{ font-size:.85rem; letter-spacing:.01em; }
+
+  /* 3. títulos e textos: sem largura fixa, quebram dentro da coluna */
+  .h1,
+  .h1__l1,
+  .h1__l2,
+  .h2,
+  .h3,
+  .cta-final__title,
+  .cta-final__sub,
+  .lead{
+    max-width:100% !important;
+    width:100% !important;
+    white-space:normal !important;
+    word-break:break-word !important;
+    overflow-wrap:break-word;
+  }
+
+  /* 4. pílulas/badges do card: ocupam a largura e centralizam o texto,
+     então não dependem da largura intrínseca do texto em caixa alta */
+  .seals--cta{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    justify-content:center;
+    margin:8px auto;
+  }
+  .seal{
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    white-space:normal !important;
+    word-break:break-word !important;
+    overflow-wrap:anywhere;
+    text-align:center;
+    margin:0;
+  }
+  /* dentro do card cada pílula vira uma linha inteira: o texto longo quebra
+     na largura do card em vez de esticar a linha do flex */
+  .seals--cta .seal{
+    width:100% !important;
+    margin:8px auto;
+    justify-content:center;
+  }
+}
+@media (max-width:640px){
+  /* espaço é pouco: o CTA do header vira só o ícone do WhatsApp,
+     com o texto continuando disponível para leitor de tela */
+  .header__cta{ width:44px; min-width:44px; height:44px; padding-inline:0; justify-content:center; }
+  .header__cta__label{
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0;
+    overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap;
+  }
+  /* card, botão e selos já são contidos na regra ≤768px acima; aqui fica só o
+     ajuste fino: balanceamento das linhas do rótulo dentro do card. */
+  .cta-final__in{ width:100%; min-width:0; }
+  .btn--xl .btn__label,.btn--xl .btn__sub{ text-wrap:balance; }
+}
+@media (max-width:420px){
+  /* com a quebra liberada, um passo abaixo no corpo do rótulo cabe o CTA inteiro
+     em duas linhas em 320–420px, ainda com presença de botão principal */
+  .btn--xl .btn__label{ font-size:.78rem; letter-spacing:.01em; }
+  .hero__actions .btn{ width:100%; }
+  .social__actions .btn{ width:100%; }
+}
+@media (hover:none){
+  .card:hover{ transform:none; border-color:var(--line); box-shadow:var(--shadow-card); }
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  .js [data-reveal]{ opacity:1; transform:none; }
+  .quotes__view{ scroll-behavior:auto; }
+}
+@media print{
+  .header,.quotes__ctrl,.skip{ display:none; }
+  body{ background:#fff; color:#000; }
+}
+</style>
+</head>
+<body>
+
+<!-- sprite único de ícones: fora da tela (0×0), mas com todos os <symbol> resolvíveis por <use> -->
+<svg class="od-sprite" aria-hidden="true" focusable="false" width="0" height="0" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></symbol>
+<symbol id="i-wa" viewBox="0 0 24 24">
+  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path>
+</symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h15m0 0l-6-6m6 6l-6 6"></path></symbol>
+<symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4v15m0 0l-6-6m6 6l6-6"></path></symbol>
+<symbol id="i-factory" viewBox="0 0 24 24"><path d="M3 20.5h18M4.5 20.5V10l5 3.2V10l5 3.2V10l5 3.2v7.3M9 10V5.5h3V8"></path></symbol>
+<symbol id="i-scissors" viewBox="0 0 24 24">
+  <circle cx="6.5" cy="18" r="2.5"></circle><circle cx="17.5" cy="18" r="2.5"></circle>
+  <path d="M8.4 16.2L18 4.5M15.6 16.2L6 4.5"></path>
+</symbol>
+<symbol id="i-print" viewBox="0 0 24 24">
+  <path d="M7 8.5V3.5h10v5M5 8.5h14a1 1 0 0 1 1 1V15h-4M7 12h13M7 12v8.5h10V12M9.5 15.5h5"></path>
+</symbol>
+<symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z"></path><path d="M14.5 5.5l4 4"></path></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.2A7 7 0 1 0 5 9.8C5 14.8 12 21 12 21z"></path><circle cx="12" cy="9.8" r="2.5"></circle></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.5 6.5h17v11h-17z"></path><path d="M3.5 7.5l8.5 6 8.5-6"></path></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7v5.3l3.4 2"></path></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"></path></symbol>
+<symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.5 6.5L9 12l5.5 5.5"></path></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9.5 6.5L15 12l-5.5 5.5"></path></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.5l8.5 15h-17z"></path><path d="M12 10v4.4M12 17.2v.1"></path></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24">
+  <rect x="3.5" y="3.5" width="17" height="17" rx="5.2"></rect>
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M17.2 7.2h.01"></path>
+</symbol>
+</defs></svg>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="header">
+  <div class="wrap header__in">
+    <a class="brand" href="#inicio" aria-label="Uniformes Anápolis — início">
+      <span class="logo brand__mark"><img src="WhatsApp-Image-2026-09-30-at-08.48.15.png" alt="Uniformes Anápolis" width="1024" height="1024" loading="eager" fetchpriority="high" decoding="async"></span>
+      <span class="brand__text">
+        <span class="brand__name">Uniformes <em>Anápolis</em></span>
+      </span>
+    </a>
+
+    <a class="btn btn--wa header__cta od-touch" data-wa="" data-msg="Olá! Vim pelo site e quero um orçamento de uniformes." aria-label="Solicitar orçamento de uniformes pelo WhatsApp">
+      <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-wa"></use></svg>
+      <span class="header__cta__label">Solicitar Orçamento</span>
+    </a>
+
+    <button class="nav__toggle od-touch" type="button" data-nav-toggle="" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr-only" data-nav-label="">Abrir menu de navegação</span>
+      <svg class="ico ico--menu" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg>
+      <svg class="ico ico--close" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+    </button>
+
+    <nav class="nav" id="site-nav" data-nav="" aria-label="Navegação principal">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="#inicio" data-spy="">Início</a></li>
+        <li><a class="nav__link" href="#produtos" data-spy="">Produtos &amp; Modelos</a></li>
+        <li><a class="nav__link" href="#diferenciais" data-spy="">Diferenciais</a></li>
+        <li><a class="nav__link" href="#pedido-minimo" data-spy="">Pedido Mínimo</a></li>
+        <li><a class="nav__link" href="#instagram" data-spy="">Siga no Instagram</a></li>
+        <li><a class="nav__link" href="#sobre" data-spy="">Sobre Nós</a></li>
+      </ul>
+      <a class="btn btn--wa od-touch" data-wa="" data-msg="Olá! Vim pelo site e quero um orçamento de uniformes.">
+        Solicitar Orçamento
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="wrap hero__grid">
+      <div class="hero__lead">
+        <span class="logo hero__logo" data-reveal="" style="--d:0ms"><img src="WhatsApp-Image-2026-09-30-at-08.48.15.png" alt="Uniformes Anápolis" width="1024" height="1024" loading="eager" fetchpriority="high" decoding="async"></span>
+        <p class="badge" data-reveal="" style="--d:0ms">Pedido mínimo de apenas 10 peças</p>
+        <h1 class="h1" id="hero-title" data-reveal="" style="--d:40ms">
+          <span class="h1__l1">Seu uniforme vende antes de você.</span>
+          <span class="h1__l2">Transforme a sua equipe no cartão de visitas mais poderoso da sua empresa.</span>
+        </h1>
+        <p class="hero__sub" data-reveal="" style="--d:80ms">
+          O primeiro contato do cliente com a sua empresa é 100% visual. Garanta profissionalismo e
+          credibilidade à primeira vista com uniformes corporativos de alta qualidade.
+        </p>
+        <ul class="seals seals--hero od-cluster" data-reveal="" style="--d:100ms" aria-label="Por que contratar a Uniformes Anápolis">
+          <li class="seal">Direto da Fábrica</li>
+          <li class="seal">Entrega Rápida em Anápolis e Região</li>
+          <li class="seal">Qualidade e Durabilidade para a Sua Empresa</li>
+        </ul>
+        <div class="hero__actions" data-reveal="" style="--d:120ms">
+          <a class="btn btn--wa" data-wa="" data-msg="Olá! Quero que a minha equipe venda mais. Pode me passar um orçamento a partir de 10 peças?">
+            <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-wa"></use></svg>
+            Quero Minha Equipe Vendendo Mais
+          </a>
+          <a class="btn btn--ghost" href="#diferenciais">
+            Descobrir Como Destacar Minha Marca
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-arrow-down"></use></svg>
+          </a>
+        </div>
+        <p class="hero__note" data-reveal="" style="--d:160ms">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
+          Anápolis - GO · entrega rápida na região
+        </p>
+      </div>
+
+      <!-- Substitua este frame pela foto real da equipe/produção quando ela estiver disponível:
+           troque o conteúdo de .media__in por <img class="od-media" src="assets/hero-equipe.jpg" width="1600" height="1200" alt="Equipe vestida com uniformes corporativos da Uniformes Anápolis">
+           e mantenha --od-ratio:4/3 no .media para o quadro não mudar de proporção. -->
+      <div class="media od-media" data-reveal="" style="--d:120ms">
+        <span class="media__tag">Foto a enviar</span>
+        <div class="media__in">
+          <span class="media__cap">
+            <span class="media__title">Equipe que vende a sua marca</span>
+            <span class="media__text">Espaço reservado para a foto da equipe uniformizada ou do chão de fábrica.</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. PROVA SOCIAL & NÚMEROS ============ -->
+  <section class="metrics" aria-label="Números da Uniformes Anápolis">
+    <div class="wrap">
+      <div class="metrics__grid">
+        <div class="metric od-stat" data-reveal="" style="--d:0ms">
+          <span class="metric__num">10</span>
+          <span class="metric__cap">Peças já bastam para padronizar a equipe</span>
+        </div>
+        <div class="metric od-stat" data-reveal="" style="--d:40ms">
+          <span class="metric__num"><em>100%</em></span>
+          <span class="metric__cap">Fabricação própria, do desenho à costura</span>
+        </div>
+        <div class="metric od-stat" data-reveal="" style="--d:80ms">
+          <span class="metric__num">Anápolis</span>
+          <span class="metric__cap">Base e entregas rápidas na região</span>
+        </div>
+        <div class="metric od-stat" data-reveal="" style="--d:120ms">
+          <span class="metric__num">Anti-pilling</span>
+          <span class="metric__cap">Tecidos de alta durabilidade</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. CATEGORIAS DE PRODUTOS ============ -->
+  <section class="section" id="produtos" aria-labelledby="produtos-title">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Produtos &amp; Modelos</p>
+        <h2 class="h2" id="produtos-title">Cinco linhas de fabricação sob medida</h2>
+        <p class="lead">
+          A primeira impressão do cliente acontece antes de qualquer palavra. Por isso cada linha
+          tem tecido, modelagem e aplicação pensados para deixar a sua equipe — e a sua marca —
+          inconfundíveis desde o primeiro olhar.
+        </p>
+      </div>
+
+      <div class="cards od-grid">
+
+        <article class="card od-tile" data-reveal="" style="--d:0ms">
+          <div class="media media--card od-media">
+            <span class="media__tag">Foto a enviar</span>
+            <div class="media__in">
+              <span class="media__mono" aria-hidden="true">01</span>
+              <span class="media__cap"><span class="media__title">Polo corporativa</span><span class="media__text">Bordada ou estampada</span></span>
+            </div>
+          </div>
+          <div class="card__body">
+            <p class="card__eyebrow">Linha 01</p>
+            <h3 class="card__title">Camisetas Polos Corporativas</h3>
+            <p class="card__desc">A polo que o cliente associa à sua marca: modelagem confortável para o atendimento, o comercial e a operação, com gola e caimento conferidos em cada lote.</p>
+            <div class="card__meta od-field">
+              <span class="label">Tecido recomendado</span>
+              <span class="value">Piquet</span>
+            </div>
+            <ul class="chips od-cluster" aria-label="Opções de personalização">
+              <li class="chip">Bordado</li>
+              <li class="chip">Silk Screen</li>
+              <li class="chip">DTF</li>
+            </ul>
+            <div class="card__foot">
+              <p class="card__min od-nowrap">A partir de 10 peças</p>
+              <a class="btn btn--ghost btn--block" data-wa="" data-msg="Olá! Quero cotar Camisetas Polos Corporativas (a partir de 10 peças)." aria-label="Solicitar cotação de Camisetas Polos Corporativas pelo WhatsApp">Solicitar Cotação</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card od-tile" data-reveal="" style="--d:40ms">
+          <div class="media media--card od-media">
+            <span class="media__tag">Foto a enviar</span>
+            <div class="media__in">
+              <span class="media__mono" aria-hidden="true">02</span>
+              <span class="media__cap"><span class="media__title">Operacional</span><span class="media__text">Alta resistência</span></span>
+            </div>
+          </div>
+          <div class="card__body">
+            <p class="card__eyebrow">Linha 02</p>
+            <h3 class="card__title">Uniformes Operacionais e Industriais</h3>
+            <p class="card__desc">Conjunto e calça que passam confiança e segurança no chão de fábrica, na logística e nos serviços que aguentam o dia inteiro.</p>
+            <div class="card__meta od-field">
+              <span class="label">Tecido recomendado</span>
+              <span class="value">Sarja e brim de algodão</span>
+            </div>
+            <ul class="chips od-cluster" aria-label="Opções de personalização">
+              <li class="chip">Bordado</li>
+              <li class="chip">DTF</li>
+              <li class="chip">Silk Screen</li>
+            </ul>
+            <div class="card__foot">
+              <p class="card__min od-nowrap">A partir de 10 peças</p>
+              <a class="btn btn--ghost btn--block" data-wa="" data-msg="Olá! Quero cotar Uniformes Operacionais e Industriais (a partir de 10 peças)." aria-label="Solicitar cotação de Uniformes Operacionais e Industriais pelo WhatsApp">Solicitar Cotação</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card od-tile" data-reveal="" style="--d:80ms">
+          <div class="media media--card od-media">
+            <span class="media__tag">Foto a enviar</span>
+            <div class="media__in">
+              <span class="media__mono" aria-hidden="true">03</span>
+              <span class="media__cap"><span class="media__title">Promocional</span><span class="media__text">Algodão e poliéster</span></span>
+            </div>
+          </div>
+          <div class="card__body">
+            <p class="card__eyebrow">Linha 03</p>
+            <h3 class="card__title">Camisetas Promocionais e Eventos</h3>
+            <p class="card__desc">Peças de grande volume para marketing, confraternização e eventos, com cor e estampa aprovadas por você antes de a produção rodar.</p>
+            <div class="card__meta od-field">
+              <span class="label">Tecido recomendado</span>
+              <span class="value">Malha PV e algodão</span>
+            </div>
+            <ul class="chips od-cluster" aria-label="Opções de personalização">
+              <li class="chip">Silk Screen</li>
+              <li class="chip">DTF</li>
+              <li class="chip">Bordado</li>
+            </ul>
+            <div class="card__foot">
+              <p class="card__min od-nowrap">A partir de 10 peças</p>
+              <a class="btn btn--ghost btn--block" data-wa="" data-msg="Olá! Quero cotar Camisetas Promocionais e de Eventos (a partir de 10 peças)." aria-label="Solicitar cotação de Camisetas Promocionais e de Eventos pelo WhatsApp">Solicitar Cotação</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card od-tile" data-reveal="" style="--d:120ms">
+          <div class="media media--card od-media">
+            <span class="media__tag">Foto a enviar</span>
+            <div class="media__in">
+              <span class="media__mono" aria-hidden="true">04</span>
+              <span class="media__cap"><span class="media__title">Administrativa</span><span class="media__text">Camisaria e blazers</span></span>
+            </div>
+          </div>
+          <div class="card__body">
+            <p class="card__eyebrow">Linha 04</p>
+            <h3 class="card__title">Linha Administrativa &amp; Social</h3>
+            <p class="card__desc">Camisaria e blazer para recepção, eventos e equipe social: o caimento alinhado que faz a sua empresa parecer do tamanho que ela é.</p>
+            <div class="card__meta od-field">
+              <span class="label">Tecido recomendado</span>
+              <span class="value">Oxford e tropical</span>
+            </div>
+            <ul class="chips od-cluster" aria-label="Opções de personalização">
+              <li class="chip">Bordado</li>
+              <li class="chip">DTF</li>
+            </ul>
+            <div class="card__foot">
+              <p class="card__min od-nowrap">A partir de 10 peças</p>
+              <a class="btn btn--ghost btn--block" data-wa="" data-msg="Olá! Quero cotar a Linha Administrativa e Social (camisaria e blazers)." aria-label="Solicitar cotação da Linha Administrativa e Social pelo WhatsApp">Solicitar Cotação</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card--wide od-tile" data-reveal="" style="--d:160ms">
+          <div class="media media--card od-media">
+            <span class="media__tag">Foto a enviar</span>
+            <div class="media__in">
+              <span class="media__mono" aria-hidden="true">05</span>
+              <span class="media__cap"><span class="media__title">Esportiva</span><span class="media__text">Terceirão, turmas e times</span></span>
+            </div>
+          </div>
+          <div class="card__body">
+            <p class="card__eyebrow">Linha 05</p>
+            <h3 class="card__title">Uniformes Esportivos e Terceirão / Turmas</h3>
+            <p class="card__desc">Conjunto para futebol de campo, vôlei, corrida e turmas de escola: tecido leve, numeração completa e a sua marca em chestão ou nas costas.</p>
+            <div class="card__meta od-field">
+              <span class="label">Tecido recomendado</span>
+              <span class="value">Dry fit e malha leve</span>
+            </div>
+            <ul class="chips od-cluster" aria-label="Opções de personalização">
+              <li class="chip">Silk Screen</li>
+              <li class="chip">Sublimação</li>
+              <li class="chip">Bordado</li>
+            </ul>
+            <div class="card__foot">
+              <p class="card__min od-nowrap">A partir de 10 peças</p>
+              <a class="btn btn--ghost btn--block" data-wa="" data-msg="Olá! Quero cotar uniformes esportivos e de turmas (a partir de 10 peças)." aria-label="Solicitar cotação de uniformes esportivos e de turmas pelo WhatsApp">Solicitar Cotação</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. DIFERENCIAIS ============ -->
+  <section class="section section--alt" id="diferenciais" aria-labelledby="diferenciais-title">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Direto da fábrica, sem intermediário</p>
+        <h2 class="h2" id="diferenciais-title">Por que escolher a Uniformes Anápolis?</h2>
+        <p class="lead">Quatro motivos que costumam decidir a escolha de quem já cotou em outro lugar — e que protegem a imagem da sua empresa todos os dias.</p>
+      </div>
+
+      <div class="diffs od-grid">
+        <article class="diff" data-reveal="" style="--d:0ms">
+          <div class="diff__top">
+            <span class="diff__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-factory"></use></svg></span>
+            <span class="diff__num" aria-hidden="true">01</span>
+          </div>
+          <h3 class="diff__title">Atendimento Direto da Fábrica</h3>
+          <p class="diff__text">Sem intermediários: você conversa com quem corta, costura e entrega. É o preço justo que sobra no orçamento e vira tecido bom na sua equipe.</p>
+        </article>
+
+        <article class="diff" data-reveal="" style="--d:40ms">
+          <div class="diff__top">
+            <span class="diff__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-scissors"></use></svg></span>
+            <span class="diff__num" aria-hidden="true">02</span>
+          </div>
+          <h3 class="diff__title">Corte e Costura de Precisão</h3>
+          <p class="diff__text">Modelagens confortáveis e sob medida para a sua equipe, com acabamento idêntico do primeiro ao último lote — porque a sua marca não pode depender do dia.</p>
+        </article>
+
+        <article class="diff" data-reveal="" style="--d:80ms">
+          <div class="diff__top">
+            <span class="diff__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-print"></use></svg></span>
+            <span class="diff__num" aria-hidden="true">03</span>
+          </div>
+          <h3 class="diff__title">Personalização de Alta Definição</h3>
+          <p class="diff__text">Bordados computadorizados e estamparia durável, que não desbota na lavagem e mantêm a sua marca legível e intacta peça após peça.</p>
+        </article>
+
+        <article class="diff" data-reveal="" style="--d:120ms">
+          <div class="diff__top">
+            <span class="diff__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg></span>
+            <span class="diff__num" aria-hidden="true">04</span>
+          </div>
+          <h3 class="diff__title">Suporte no Design</h3>
+          <p class="diff__text">Ajudamos a criar e adequar a sua logomarca ao uniforme, do desenho à aplicação — com ajuste de cor, posição e escala para a marca aparecer bem em qualquer peça.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. PASSO A PASSO / PEDIDO MÍNIMO ============ -->
+  <section class="section" id="pedido-minimo" aria-labelledby="pedido-title">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Pedido mínimo a partir de 10 peças</p>
+        <h2 class="h2" id="pedido-title">Passo a passo do seu pedido</h2>
+        <p class="lead">Quatro etapas, do modelo à entrega. Você acompanha e aprova tudo antes de a primeira peça entrar na produção — nada de surpresa no preço ou no resultado.</p>
+      </div>
+
+      <ol class="steps od-grid">
+        <li class="step" data-reveal="" style="--d:0ms">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">Escolha o Modelo e o Tecido</h3>
+          <p class="step__text">A partir de 10 unidades, com a linha e o tecido definidos para o uso real da sua equipe.</p>
+        </li>
+        <li class="step" data-reveal="" style="--d:40ms">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">Envie sua Marca</h3>
+          <p class="step__text">Você envia o arquivo da logomarca e nós ajustamos a aplicação gráfica no modelo.</p>
+        </li>
+        <li class="step" data-reveal="" style="--d:80ms">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">Aprovação do Layout Virtual</h3>
+          <p class="step__text">Você aprova o mockup antes de qualquer peça entrar na produção.</p>
+        </li>
+        <li class="step" data-reveal="" style="--d:120ms">
+          <span class="step__num" aria-hidden="true">4</span>
+          <h3 class="step__title">Produção &amp; Entrega Garantida</h3>
+          <p class="step__text">Corte, costura, personalização e entrega combinada em Anápolis e região.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 6. DEPOIMENTOS ============ -->
+  <!-- CONTEÚDO PENDENTE: os três slides abaixo são placeholders explícitos.
+       Nenhum depoimento, nome ou empresa foi inventado. Substitua o texto de
+       .quote__text, .quote__name e .quote__org e remova a .tag "Depoimento pendente". -->
+  <section class="section section--alt" id="depoimentos" aria-labelledby="depoimentos-title">
+    <div class="wrap">
+      <div class="head" style="text-align:center">
+        <p class="eyebrow" style="justify-content:center">Quem já pediu</p>
+        <h2 class="h2" id="depoimentos-title">Depoimentos de empresas e equipes</h2>
+      </div>
+
+      <div class="quotes" data-reveal="">
+        <h3 class="sr-only">Carrossel de depoimentos</h3>
+        <div class="quotes__view" data-quotes="" role="group" aria-roledescription="carrossel" aria-label="Depoimentos de clientes" tabindex="0">
+          <ul class="quotes__track" data-track="">
+            <li class="quote" role="group" aria-roledescription="slide" aria-label="Depoimento 1 de 3">
+              <span class="quote__rule" aria-hidden="true"></span>
+              <blockquote class="quote__text">Depoimento do cliente — texto a inserir após o primeiro atendimento.</blockquote>
+              <figcaption class="quote__by od-field">
+                <span class="quote__name">Nome do cliente — a inserir</span>
+                <span class="quote__org">Empresa atendida — a inserir</span>
+              </figcaption>
+              <span class="tag">Depoimento pendente</span>
+            </li>
+            <li class="quote" role="group" aria-roledescription="slide" aria-label="Depoimento 2 de 3">
+              <span class="quote__rule" aria-hidden="true"></span>
+              <blockquote class="quote__text">Depoimento do cliente — texto a inserir após o primeiro atendimento.</blockquote>
+              <figcaption class="quote__by od-field">
+                <span class="quote__name">Nome do cliente — a inserir</span>
+                <span class="quote__org">Empresa atendida — a inserir</span>
+              </figcaption>
+              <span class="tag">Depoimento pendente</span>
+            </li>
+            <li class="quote" role="group" aria-roledescription="slide" aria-label="Depoimento 3 de 3">
+              <span class="quote__rule" aria-hidden="true"></span>
+              <blockquote class="quote__text">Depoimento do cliente — texto a inserir após o primeiro atendimento.</blockquote>
+              <figcaption class="quote__by od-field">
+                <span class="quote__name">Nome do cliente — a inserir</span>
+                <span class="quote__org">Empresa atendida — a inserir</span>
+              </figcaption>
+              <span class="tag">Depoimento pendente</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="quotes__ctrl">
+          <button class="quotes__btn" type="button" data-quotes-prev="">
+            <span class="sr-only">Depoimento anterior</span>
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-chev-l"></use></svg>
+          </button>
+          <div class="quotes__dots" role="tablist" aria-label="Selecionar depoimento"></div>
+          <button class="quotes__btn" type="button" data-quotes-next="">
+            <span class="sr-only">Próximo depoimento</span>
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-chev-r"></use></svg>
+          </button>
+        </div>
+        <p class="sr-only" aria-live="polite" data-quotes-live=""></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. SOBRE NÓS ============ -->
+  <section class="section" id="sobre" aria-labelledby="sobre-title">
+    <div class="wrap about">
+      <div class="about__text">
+        <p class="eyebrow">Sobre nós</p>
+        <h2 class="h2" id="sobre-title">Confecção têxtil feita em Anápolis - GO</h2>
+        <!-- TEXTO A VALIDAR: este bloco usa apenas as informações do briefing.
+             Expanda com a história da fábrica, anos de atuação e diferenciais reais
+             antes de publicar. -->
+        <p>
+          Antes de o cliente perguntar o preço, ele já olhou para a sua equipe. A Uniformes
+          Anápolis existe para que esse primeiro olhar transmita exatamente o que a sua empresa
+          promete: fabricação própria de uniformes corporativos, camisetas e vestuário
+          personalizado, com desenho, corte, costura e aplicação da sua marca conduzidos pela
+          mesma equipe.
+        </p>
+        <p>
+          Atendemos empresas de todos os portes em Anápolis e região, com pedido mínimo de 10
+          peças e atendimento direto de quem produz. Você fala com a fábrica, não com
+          intermediário — e a sua equipe entra no campo com uniforme que sustenta a credibilidade
+          da marca.
+        </p>
+        <p style="margin-top:24px">
+          <a class="btn btn--ghost" data-wa="" data-msg="Olá! Quero conhecer melhor a fábrica e receber um orçamento.">
+            Falar com a fábrica
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+          </a>
+        </p>
+      </div>
+
+      <ul class="about__list">
+        <li class="about__item">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+          <span>Fabricação própria de uniformes, camisetas e vestuário corporativo</span>
+        </li>
+        <li class="about__item">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+          <span>Pedido mínimo a partir de 10 peças, com modelos mistos no mesmo pedido</span>
+        </li>
+        <li class="about__item">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+          <span>Bordado computadorizado, silk screen e DTF</span>
+        </li>
+        <li class="about__item">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+          <span>Apoio de design para adequar a sua logomarca ao uniforme</span>
+        </li>
+        <li class="about__item">
+          <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+          <span>Entrega combinada em Anápolis e região</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 8. INSTAGRAM & CATÁLOGOS ============ -->
+  <!-- CONTEÚDO PENDENTE: as três publicações abaixo são espaços projetados, com
+       marcação visível de "A inserir". Nenhuma publicação, contagem de seguidores
+       ou print de perfil foi inventado — são os seus posts reais, com os seus
+       arquivos. Para trocar: substitua o conteúdo de .media__in dentro de cada
+       .post por <img class="od-media" src="assets/instagram-01.jpg" width="1200" height="1200"
+       alt="Catálogo de uniformes publicado no Instagram da Uniformes Anápolis">
+       e mantenha --od-ratio:4/3 no .media para o quadro não mudar de proporção.
+       O link do perfil vem de CONFIG.instagramUrl (bloco "CONFIGURE AQUI" no fim do arquivo). -->
+  <section class="section" id="instagram" aria-labelledby="instagram-title">
+    <div class="wrap">
+      <div class="social" data-reveal="">
+        <div class="social__in">
+
+          <div class="social__copy">
+            <p class="eyebrow eyebrow--soft">Instagram &amp; catálogos</p>
+            <h2 class="h2" id="instagram-title">Acompanhe Nossos Lançamentos e Catálogos Exclusivos</h2>
+            <p class="lead">
+              Publicamos semanalmente no nosso Instagram os novos modelos de uniformes, bastidores da
+              fabricação própria, combinações de tecidos e catálogos atualizados para inspirar a sua
+              marca.
+            </p>
+
+            <div class="social__profile od-row">
+              <span class="logo social__avatar"><img src="WhatsApp-Image-2026-09-30-at-08.48.15.png" alt="Uniformes Anápolis" width="1024" height="1024" loading="lazy" decoding="async"></span>
+              <span class="social__id od-field od-fill">
+                <span class="social__name">Uniformes Anápolis</span>
+                <span class="social__handle" data-cfg="instagram">Perfil oficial — a configurar no bloco CONFIG</span>
+              </span>
+            </div>
+
+            <ul class="seals od-cluster" aria-label="O que você encontra no Instagram">
+              <li class="seal">Novos Catálogos</li>
+              <li class="seal">Tecidos Premium</li>
+              <li class="seal">Tendências Corporativas</li>
+            </ul>
+
+            <div class="social__actions" data-instagram-actions="">
+              <a class="btn btn--primary btn--social od-touch" data-ig="" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir o Instagram em uma nova aba para ver os catálogos completos da Uniformes Anápolis">
+                <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-camera"></use></svg>
+                Acessar Instagram &amp; Ver Catálogos Completos
+              </a>
+              <p class="social__hint" data-instagram-note="">
+                Por enquanto o botão abre a <strong>página inicial do Instagram</strong>. Assim que
+                <strong>CONFIG.instagramUrl</strong> for preenchido no bloco “CONFIGURE AQUI”, ele passa
+                a apontar direto para o perfil oficial da Uniformes Anápolis.
+              </p>
+            </div>
+          </div>
+
+          <div class="feed">
+            <h3 class="sr-only">Prévia das publicações do Instagram</h3>
+
+            <figure class="post" data-reveal="" style="--d:0ms">
+              <div class="media od-media">
+                <span class="media__tag">A inserir</span>
+                <div class="media__in">
+                  <span class="media__mono" aria-hidden="true">CAT</span>
+                </div>
+              </div>
+              <figcaption class="post__cap od-field">
+                <span class="post__title">Novos catálogos</span>
+                <span class="post__text">Modelos, tabelas de medidas e combinações prontas para aprovar.</span>
+              </figcaption>
+            </figure>
+
+            <figure class="post" data-reveal="" style="--d:40ms">
+              <div class="media od-media">
+                <span class="media__tag">A inserir</span>
+                <div class="media__in">
+                  <span class="media__mono" aria-hidden="true">BAST</span>
+                </div>
+              </div>
+              <figcaption class="post__cap od-field">
+                <span class="post__title">Bastidores da fabricação</span>
+                <span class="post__text">Corte, costura e aprovação de layout gravados na própria fábrica.</span>
+              </figcaption>
+            </figure>
+
+            <figure class="post" data-reveal="" style="--d:80ms">
+              <div class="media od-media">
+                <span class="media__tag">A inserir</span>
+                <div class="media__in">
+                  <span class="media__mono" aria-hidden="true">TEC</span>
+                </div>
+              </div>
+              <figcaption class="post__cap od-field">
+                <span class="post__title">Tecidos e tendências</span>
+                <span class="post__text">Paleta, gramatura e caimento lado a lado para você escolher com segurança.</span>
+              </figcaption>
+            </figure>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. CTA FINAL ============ -->
+  <section class="section section--line" id="orcamento" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-final" data-reveal="">
+        <div class="cta-final__in">
+          <p class="eyebrow" style="justify-content:center">Vamos começar</p>
+          <h2 class="cta-final__title" id="cta-title">Pronto para padronizar sua equipe com qualidade e estilo?</h2>
+          <p class="cta-final__sub">
+            Fale diretamente com nossos especialistas em confecção e receba um orçamento em
+            menos de 15 minutos.
+          </p>
+            <a class="btn btn--wa btn--xl" data-wa="" data-msg="Olá! Quero solicitar um orçamento. Meu pedido mínimo é de 10 peças.">
+              <span class="btn__label">Solicitar Orçamento &amp; Pedido Mínimo</span>
+              <span class="btn__sub">(10 peças)</span>
+            </a>
+            <ul class="seals seals--cta od-cluster" aria-label="Como é o atendimento">
+              <li class="seal">Solicite Orçamento Rápido via WhatsApp</li>
+              <li class="seal">Atendimento Personalizado</li>
+              <li class="seal">Garantia de Qualidade</li>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 9. RODAPÉ ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__about">
+        <a class="brand" href="#inicio" aria-label="Uniformes Anápolis — início">
+          <span class="logo brand__mark"><img src="WhatsApp-Image-2026-09-30-at-08.48.15.png" alt="Uniformes Anápolis" width="1024" height="1024" loading="lazy" decoding="async"></span>
+          <span class="brand__text">
+            <span class="brand__name">Uniformes <em>Anápolis</em></span>
+            <span class="brand__sub">Confecção corporativa</span>
+          </span>
+        </a>
+        <p>
+          Fabricação própria de uniformes profissionais, camisetas corporativas e vestuário
+          personalizado em Anápolis - GO, com pedido mínimo de 10 peças.
+        </p>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__title">Navegação</h2>
+        <nav aria-label="Navegação do rodapé">
+          <div class="footer__nav">
+            <a href="#inicio">Início</a>
+            <a href="#produtos">Produtos &amp; Modelos</a>
+            <a href="#diferenciais">Diferenciais</a>
+            <a href="#pedido-minimo">Pedido Mínimo</a>
+            <a href="#instagram">Siga no Instagram</a>
+            <a href="#sobre">Sobre Nós</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__title">Contato</h2>
+        <ul class="foot-list">
+          <li class="foot-item">
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-wa"></use></svg>
+            <span class="od-field">
+              <span style="display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-soft)">WhatsApp</span>
+              <a data-cfg="whatsapp" href="#">WhatsApp — a configurar</a>
+            </span>
+          </li>
+          <li class="foot-item">
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>
+            <span class="od-field">
+              <span style="display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-soft)">E-mail comercial</span>
+              <span data-cfg="email" class="pending">E-mail comercial — a configurar</span>
+            </span>
+          </li>
+          <li class="foot-item">
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
+            <span class="od-field">
+              <span style="display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-soft)">Endereço</span>
+              <span data-cfg="address" class="pending">Endereço em Anápolis - GO — a configurar</span>
+            </span>
+          </li>
+          <li class="foot-item">
+            <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+            <span class="od-field">
+              <span style="display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-soft)">Atendimento</span>
+              <span data-cfg="hours" class="pending">Horário — a configurar</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer__note">
+      <svg class="ico ico--sm" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg>
+      <span>
+        Contatos-placeholder: WhatsApp, e-mail, endereço, horário e o link do Instagram ainda não
+        foram definidos. Preencha uma única vez no objeto <strong>CONFIG</strong> no final deste
+        arquivo (bloco “CONFIGURE AQUI”) e todos os botões e dados do rodapé passam a usar os
+        valores reais.
+      </span>
+    </p>
+
+    <div class="footer__legal">
+      <span>© Uniformes Anápolis - Todos os direitos reservados.</span>
+      <span>Confecção corporativa em Anápolis - GO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   CONFIGURE AQUI — única origem dos dados de contato.
+   Troque só este bloco: todos os botões de WhatsApp, o botão do
+   Instagram e o rodapé passam a usar os valores reais automaticamente.
+   · whatsappNumber : apenas dígitos, com DDI 55 + DDD. Ex.: 5562999998888
+   · email / address / hours : texto pronto para exibição.
+   · instagramUrl : endereço do perfil oficial, começando com https://
+     Ex.: https://www.instagram.com/uniformesanapolis
+     Enquanto este campo não for preenchido, o botão da seção
+     "Instagram & Catálogos" abre a página inicial do Instagram
+     (instagram.com). Nenhum perfil é inventado e nenhum clique sai
+     para a conta errada.
+   Valores que começarem com "SUBSTITUIR_" continuam como
+   placeholder visível no rodapé — nada de dado inventado.
+   ============================================================ */
+const CONFIG = {
+  whatsappNumber: "5500000000000", // SUBSTITUIR_WHATSAPP — DDI 55 + DDD 62 + número
+  email:         "SUBSTITUIR_EMAIL",
+  address:       "SUBSTITUIR_ENDERECO",
+  hours:         "SUBSTITUIR_HORARIO",
+  instagramUrl:  "SUBSTITUIR_INSTAGRAM",
+  defaultMessage:"Olá! Vim pelo site da Uniformes Anápolis e quero um orçamento de uniformes (mínimo de 10 peças)."
+};
+
+(function () {
+  "use strict";
+  var isFilled = function (v) { return !!v && v.indexOf("SUBSTITUIR_") !== 0; };
+
+  /* ---------- 1. telefone: formatação e links de WhatsApp ---------- */
+  function brPhone(raw) {
+    var d = String(raw || "").replace(/\D/g, "");
+    if (d.length === 13) d = d.slice(2);              // remove o DDI 55
+    if (d.length === 11) return { ddd: d.slice(0, 2), n: "9" + d.slice(2) };
+    if (d.length === 10) return { ddd: d.slice(0, 2), n: d.slice(2) };
+    return null;
+  }
+  function phoneLabel(raw) {
+    var p = brPhone(raw);
+    return p ? "(" + p.ddd + ") " + p.n.slice(0, 5) + "-" + p.n.slice(5) : String(raw || "");
+  }
+  function waLink(el) {
+    var raw = String(CONFIG.whatsappNumber || "").replace(/\D/g, "");
+    var msg = el.getAttribute("data-msg") || CONFIG.defaultMessage;
+    el.setAttribute("href", "https://wa.me/" + raw + "?text=" + encodeURIComponent(msg));
+    el.setAttribute("target", "_blank");
+    el.setAttribute("rel", "noopener noreferrer");
+  }
+
+  document.querySelectorAll("[data-wa]").forEach(waLink);
+
+  var waSlot = document.querySelector('[data-cfg="whatsapp"]');
+  if (waSlot) {
+    if (isFilled(CONFIG.whatsappNumber) && brPhone(CONFIG.whatsappNumber)) {
+      waSlot.textContent = phoneLabel(CONFIG.whatsappNumber);
+      waSlot.setAttribute("href", "https://wa.me/" + String(CONFIG.whatsappNumber).replace(/\D/g, "") + "?text=" + encodeURIComponent(CONFIG.defaultMessage));
+      waSlot.setAttribute("target", "_blank");
+      waSlot.setAttribute("rel", "noopener noreferrer");
+    } else {
+      waSlot.textContent = "a configurar";
+      waSlot.className = "pending";
+      waSlot.removeAttribute("href");
+    }
+  }
+
+  /* outros campos de contato: viram texto com marca de pendência quando não preenchidos */
+  var label = {
+    email:   "E-mail comercial — a configurar",
+    address: "Endereço em Anápolis - GO — a configurar",
+    hours:   "Horário — a configurar"
+  };
+  ["email", "address", "hours"].forEach(function (key) {
+    var el = document.querySelector('[data-cfg="' + key + '"]');
+    if (!el) return;
+    if (isFilled(CONFIG[key])) {
+      el.textContent = CONFIG[key];
+      el.className = "";
+      if (key === "email") {
+        var a = document.createElement("a");
+        a.href = "mailto:" + CONFIG[key];
+        a.textContent = CONFIG[key];
+        el.replaceWith(a);
+      }
+    } else {
+      el.textContent = label[key];
+      el.className = "pending";
+    }
+  });
+
+  /* ---------- 2. Instagram: destino do botão ----------
+     O botão vive no HTML e já abre a página inicial do Instagram
+     (instagram.com) em nova aba: nenhum perfil é adivinhado e nenhum
+     clique sai para a conta errada. Quando CONFIG.instagramUrl tiver
+     um https:// real, este bloco troca o destino pelo perfil oficial e
+     atualiza o @handle e a nota. */
+  (function () {
+    var btn    = document.querySelector("[data-ig]");
+    var handle = document.querySelector('[data-cfg="instagram"]');
+    var note   = document.querySelector("[data-instagram-note]");
+    var url    = String(CONFIG.instagramUrl || "").trim();
+    var real   = isFilled(url) && /^https?:\/\//i.test(url);
+
+    if (!real) {
+      if (handle) { handle.textContent = "Perfil oficial — a configurar no bloco CONFIG"; handle.className = "pending"; }
+      if (note)   { note.innerHTML = 'Por enquanto o botão abre a <strong>página inicial do Instagram</strong>. Assim que <strong>CONFIG.instagramUrl</strong> for preenchido no bloco “CONFIGURE AQUI”, ele passa a apontar direto para o perfil oficial da Uniformes Anápolis.'; }
+      return;
+    }
+
+    var user = url
+      .replace(/^https?:\/\/(www\.)?instagram\.com\//i, "")
+      .split(/[/?#]/)[0]
+      .replace(/^@/, "");
+
+    if (btn) {
+      btn.href = url;
+      btn.setAttribute("aria-label", "Abrir o perfil oficial da Uniformes Anápolis no Instagram em uma nova aba");
+    }
+    if (handle) { handle.textContent = user ? "@" + user : "Instagram"; handle.className = ""; }
+    if (note)   { note.textContent = "O perfil oficial abre em uma nova aba, com os catálogos completos disponíveis para download."; }
+  })();
+
+  /* ---------- 3. rolagem suave das âncoras internas ----------
+     Todos os links de navegação usam href="#id" e são resolvidos aqui na própria
+     página: o clique é cancelado, a rolagem é suave com folga para o header fixo
+     e a URL é atualizada sem disparar nenhuma requisição ao servidor. */
+  (function () {
+    var header = document.querySelector(".header");
+    var reduce = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+
+    function targetOf(hash) {
+      return hash && hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
+    }
+    function scrollToEl(el) {
+      var head = header ? header.offsetHeight : 0;
+      var y = Math.max(el.getBoundingClientRect().top + window.pageYOffset - head - 12, 0);
+      try { window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" }); }
+      catch (err) { window.scrollTo(0, y); }
+    }
+    function setHash(hash) {
+      try { history.replaceState(null, "", hash); } catch (err) { /* file:// — ignora */ }
+    }
+
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a) return;
+      var hash = a.getAttribute("href") || "";
+      var target = targetOf(hash);
+      if (!target) return;
+      e.preventDefault();
+      scrollToEl(target);
+      setHash(hash);
+      /* foco na seção: teclado e leitor de tela acompanham a navegação */
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    });
+
+    /* página aberta já com âncora na URL */
+    if (targetOf(location.hash)) {
+      window.addEventListener("load", function () {
+        var t = targetOf(location.hash);
+        if (t) setTimeout(function () { scrollToEl(t); }, 0);
+      });
+    }
+  })();
+
+  /* ---------- 4. menu mobile ---------- */
+  var toggle = document.querySelector("[data-nav-toggle]");
+  var nav = document.querySelector("[data-nav]");
+  if (toggle && nav) {
+    var toggleLabel = toggle.querySelector("[data-nav-label]");
+    var setNav = function (open) {
+      nav.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      if (toggleLabel) toggleLabel.textContent = open ? "Fechar menu de navegação" : "Abrir menu de navegação";
+    };
+    var closeNav = function () { setNav(false); };
+
+    toggle.addEventListener("click", function () { setNav(!nav.classList.contains("is-open")); });
+    nav.addEventListener("click", function (e) { if (e.target.closest("a")) closeNav(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) { closeNav(); toggle.focus(); }
+    });
+    document.addEventListener("click", function (e) {
+      if (nav.classList.contains("is-open") && !nav.contains(e.target) && !toggle.contains(e.target)) closeNav();
+    });
+    /* saiu do mobile: o painel Some e o estado volta ao botão, sem sobra de aria-expanded */
+    window.addEventListener("resize", function () { if (window.innerWidth >= 1280) closeNav(); });
+    setNav(false);
+  }
+
+  /* ---------- 5. seção ativa na navegação ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("[data-spy]"));
+  if (links.length && "IntersectionObserver" in window) {
+    var byId = {};
+    links.forEach(function (l) { byId[l.getAttribute("href").slice(1)] = l; });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (l) { l.removeAttribute("aria-current"); });
+        var target = byId[en.target.id];
+        if (target) target.setAttribute("aria-current", "true");
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    Object.keys(byId).forEach(function (id) {
+      var s = document.getElementById(id);
+      if (s) spy.observe(s);
+    });
+  }
+
+  /* ---------- 6. revelação no scroll ---------- */
+  var reveal = Array.prototype.slice.call(document.querySelectorAll("[data-reveal]"));
+  if (!("IntersectionObserver" in window)) {
+    reveal.forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("is-in"); obs.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    reveal.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- 7. carrossel de depoimentos ----------
+     O movimento é CSS: scroll-snap no trilho, então arrastar com o dedo,
+     rolar o trackpad e usar as setas do teclado funcionam sem nenhum
+     código de arraste. O JS só sincroniza os controles com a posição. */
+  var root = document.querySelector("[data-quotes]");
+  if (root) {
+    var track = root.querySelector("[data-track]");
+    var slides = Array.prototype.slice.call(track.children);
+    var dotsBox = root.parentElement.querySelector(".quotes__dots");
+    var live = root.parentElement.querySelector("[data-quotes-live]");
+    var prev = root.parentElement.querySelector("[data-quotes-prev]");
+    var next = root.parentElement.querySelector("[data-quotes-next]");
+    var reduceMq = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+    var idx = 0;
+    var locked = false;
+    var lockTimer = 0;
+
+    var dots = slides.map(function (s, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "quotes__dot";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-label", "Ir para o depoimento " + (i + 1));
+      b.addEventListener("click", function () { go(i, true); });
+      dotsBox.appendChild(b);
+      return b;
+    });
+
+    function paint() {
+      dots.forEach(function (d, i) { d.setAttribute("aria-current", String(i === idx)); });
+    }
+    /* lê a posição real do trilho: serve tanto para o toque quanto para o botão */
+    function sync(announce) {
+      var w = root.clientWidth;
+      if (!w) return;
+      var i = Math.round(root.scrollLeft / w);
+      var next0 = Math.min(Math.max(i, 0), slides.length - 1);
+      if (next0 === idx && !announce) return;
+      idx = next0;
+      paint();
+      if (announce && live) live.textContent = "Depoimento " + (idx + 1) + " de " + slides.length;
+    }
+    function go(n, announce) {
+      var w = root.clientWidth;
+      if (!w) return;
+      idx = (n + slides.length) % slides.length;
+      locked = true;
+      try { root.scrollTo({ left: idx * w, behavior: reduceMq && reduceMq.matches ? "auto" : "smooth" }); }
+      catch (err) { root.scrollLeft = idx * w; }
+      paint();
+      if (live) live.textContent = "Depoimento " + (idx + 1) + " de " + slides.length;
+      /* trava curta: durante a rolagem suave os pontos não piscam entre slides */
+      window.clearTimeout(lockTimer);
+      lockTimer = window.setTimeout(function () { locked = false; sync(false); }, 420);
+    }
+
+    var pending = false;
+    root.addEventListener("scroll", function () {
+      if (pending) return;
+      pending = true;
+      window.requestAnimationFrame(function () { pending = false; if (!locked) sync(false); });
+    }, { passive: true });
+
+    prev.addEventListener("click", function () { go(idx - 1, true); });
+    next.addEventListener("click", function () { go(idx + 1, true); });
+    root.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft")  { go(idx - 1, true); e.preventDefault(); }
+      if (e.key === "ArrowRight") { go(idx + 1, true); e.preventDefault(); }
+    });
+    go(0, true);
+  }
+
+  /* ---------- 8. imagem que falha não vira ícone de erro ----------
+     Enquanto as fotos do cliente não entram, qualquer <img> quebrado some
+     e o placeholder projetado dentro do .media volta a aparecer. */
+  (function () {
+    function fail(img) {
+      var box = img.closest ? img.closest(".media") : null;
+      var ph = box ? box.querySelector(".media__in") : null;
+      if (ph) ph.hidden = false;
+      img.style.display = "none";
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("img"), function (img) {
+      if (img.complete) { if (img.naturalWidth === 0) fail(img); }
+      else img.addEventListener("error", function () { fail(img); });
+    });
+  })();
+})();
+</script>
+
+
+
+</body></html>
